@@ -3,16 +3,13 @@ function GameBoard() {
   const columns = 3;
   const board = [];
 
-  let marker = value => ({ makeMarker: playerMarker => (value = playerMarker) });
-  const getValue = value => ({ value: () => value });
-
   const Cell = () => {
     let value = 0;
+    const marker = playerMarker => (value = playerMarker);
+    const getValue = () => value;
 
-    return Object.assign({}, marker(value), getValue(value));
+    return { marker, getValue };
   };
-
-  console.log(Cell())
 
   for (let i = 0; i < rows; i++) {
     board[i] = [];
@@ -21,29 +18,25 @@ function GameBoard() {
     }
   }
 
-  const printGameBoard = () => {
-    console.log(board);
-  };
+  const getBoard = () => board
+  const printGameBoard = () => board.map(row => row.map( cell => cell.getValue()));
+
 
   return {
+    getBoard,
     printGameBoard,
   };
 }
 
-function Player() {
+function GameController() {
+  const board = GameBoard();
+  const makePlayer = (name, marker) => {
+    return { name, marker };
+  };
 
-  const makePlayer = (name, token) => {
-    return {name, token}
-  }
+  const players = [makePlayer('player1', 'O'), makePlayer('player2', 'X')];
 
-  const players = [
-    makePlayer('player1', 'O'),
-    makePlayer('player2', 'X')
-  ]
-
-  console.log(players)
-  
+  console.table(board.printGameBoard());
 }
 
-GameBoard().printGameBoard();
-Player()
+GameController()
