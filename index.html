@@ -1,12 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script src="script.js" defer></script>
-</head>
-<body>
-  
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+    <!-- google font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mooli&family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+    <!-- google font -->
+  </head>
+  <body>
+    <div class="main">
+      <h1>Tic Tac Toe</h1>
+      <div class="players">
+        <div>
+          <label for="player1Name">Player1 name</label>
+          <input type="text" name="player1Name" id="player1Name" />
+        </div>
+        <div>
+          <label for="player2Name">Player2 name</label>
+          <input type="text" name="player2Name" id="player2Name" />
+        </div>
+      </div>
+      <div class="startBtn">
+        <button type="button">start</button>
+      </div>
+      <div class="board"></div>
+      <div class="turn"></div>
+    </div>
+  </body>
 </html>
