@@ -54,6 +54,7 @@ body {
   background-image: url(assets/board.png);
   background-repeat: no-repeat;
   gap: 1px;
+  margin-bottom: 1em;
 }
 
 .board button {
@@ -91,11 +92,11 @@ h1 {
   margin-bottom: 1em;
 }
 
-.startBtn {
+.btns {
   margin-bottom: 2em;
 }
 
-.startBtn button {
+.btns button {
   background: #00880b;
   color: aliceblue;
   padding: 10px 15px 10px 15px;
@@ -103,10 +104,20 @@ h1 {
   font-size: inherit;
   font-family: inherit;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 input {
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #6d6d6d;
+}
+
+.turn {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.display-none {
+  display: none;
 }
