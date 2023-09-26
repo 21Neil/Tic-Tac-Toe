@@ -1,4 +1,6 @@
 function GameBoard() {
+  const rows = 3;
+  const columns = 3;
   const board = [];
 
   const cellFunction = value => ({
@@ -11,43 +13,31 @@ function GameBoard() {
 
     return Object.assign({}, cellFunction(value));
   };
-  
-  const initBoard = () => {
-    const rows = 3;
-    const columns = 3;
-    board.length = 0;
 
-    for (let i = 0; i < rows; i++) {
-      board[i] = [];
-      for (let j = 0; j < columns; j++) {
-        board[i].push(cell());
-      }
+  for (let i = 0; i < rows; i++) {
+    board[i] = [];
+    for (let j = 0; j < columns; j++) {
+      board[i].push(cell());
     }
-  };
-
-  initBoard();
+  }
 
   const getBoard = () => board;
   const printBoard = () => board.map(row => row.map(cell => cell.getValue()));
   
-
   return {
-    initBoard,
     getBoard,
     printBoard,
   };
 }
 
-function Game(playerOneName = 'player1', playerTwoName = 'player2') {
-  const board = GameBoard();
+function Game(playerOneName, playerTwoName) {
+  let board = GameBoard();
   const makePlayer = (name, marker) => ({ name, marker });
   const players = [makePlayer(playerOneName, 'O'), makePlayer(playerTwoName, 'X')];
   let activePlayer = players[0];
   let endGame = '';
 
   console.log('game start!');
-
-  board.initBoard();
 
   const getActivePlayer = () => activePlayer;
 
@@ -108,7 +98,7 @@ function Game(playerOneName = 'player1', playerTwoName = 'player2') {
     printNewRound();
     return;
   };
-
+  
   printNewRound();
 
   return {
@@ -121,22 +111,20 @@ function Game(playerOneName = 'player1', playerTwoName = 'player2') {
 
 function ScreenController() {
   const startBtn = document.querySelector('.startBtn');
-  const playerTurnDiv = document.querySelector('.turn');
-  const boardDiv = document.querySelector('.board');
-
+  
   function startBtnOnClick() {
+    const boardDiv = document.querySelector('.board');
     const restartBtn = document.querySelector('.restartBtn');
+    const playerTurnDiv = document.querySelector('.turn');
+    const players = document.querySelector('.players');
     const playerOne = document.querySelector('#player1Name');
     const playerTwo = document.querySelector('#player2Name');
-    const players = document.querySelector('.players');
 
     players.classList.add('display-none');
     startBtn.classList.add('display-none');
-    restartBtn.classList.remove('display-none');
-    restartBtn.addEventListener('click', restartBtnOnClick);
-
-    const game = Game(playerOne.value, playerTwo.value);
-
+    
+    const game = Game(playerOne.value === '' ? 'Player 1' : playerOne.value, playerTwo.value === '' ? 'Player 2' : playerTwo.value);
+    
     const printBoard = game => {
       game.getBoard().forEach((row, rowIndex) => {
         row.forEach((cell, colIndex) => {
@@ -154,16 +142,21 @@ function ScreenController() {
     const endGame = () => {
       const result = game.getEndGame();
       const allCells = document.querySelectorAll('.board button');
-
+      const lottie = document.querySelector('lottie-player')
+      
+      if(result !== 'tie') lottie.play()
       playerTurnDiv.textContent = result === 'tie' ? 'Tie!' : result + ' win!';
       allCells.forEach(cell => cell.removeEventListener('click', cellOnClick));
+
+      restartBtn.classList.remove('display-none');
+      restartBtn.addEventListener('click', restartBtnOnClick);
       return;
     };
 
     function cellOnClick(e) {
       const targetRow = e.target.dataset.row;
       const targetCol = e.target.dataset.col;
-      const result = game.playRound(targetRow, targetCol);
+      game.playRound(targetRow, targetCol);
       e.target.classList.add(game.getBoard()[targetRow][targetCol] === 'O' ? 'circle' : 'cross');
       if (game.getEndGame()) {
         endGame();
@@ -174,13 +167,15 @@ function ScreenController() {
     }
 
     function restartBtnOnClick() {
+      const allCells = document.querySelectorAll('.board button');
+
       restartBtn.classList.add('display-none');
       startBtn.classList.remove('display-none');
-      playerOne.classList.remove('display-none');
-      playerTwo.classList.remove('display-none');
+      players.classList.remove('display-none');
+      playerTurnDiv.textContent = ''
       startBtn.addEventListener('click', startBtnOnClick);
-
       restartBtn.removeEventListener('click', restartBtnOnClick);
+      allCells.forEach(cell => cell.remove())
     }
 
     printBoard(game);
